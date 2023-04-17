@@ -6,16 +6,16 @@ A Nodejs utility program that accept a URL crawls all the links under the same d
 
 Following npm scripts
 
-npm start
+### npm start
 
 This command will build the project and run the build
 
-npm start:dev
+### npm start:dev
 
 This command will start the project in development mode
 Changes will be redeployed using nodemon
 
-npm run build
+### npm run build
 
 This command will build the project
 
