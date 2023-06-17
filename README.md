@@ -42,13 +42,11 @@ async function runCrawler(): Promise<void> {
 runCrawler()
   .then(() => console.log('Crawl and screenshot complete.'))
   .catch((error) => console.error('Error:', error));
-
 ```
 
 Command line usage
 ```
 npm install superShots -g --save
-
 ```
 ```
 $ superShots https://example.com
