@@ -19,6 +19,43 @@ Changes will be redeployed using nodemon
 
 This command will build the project
 
+## Usage
+```
+npm install superShots --save
+```
+
+create a file and coppy below contents
+
+```
+import SuperShots from 'superShots';
+
+async function runCrawler(): Promise<void> {
+  const superShots = new SuperShots();
+  await superShots.initialize();
+
+  const url = 'https://example.com'; // Replace with your desired URL
+  await superShots.crawlAndScreenshot(url);
+
+  await superShots.close();
+}
+
+runCrawler()
+  .then(() => console.log('Crawl and screenshot complete.'))
+  .catch((error) => console.error('Error:', error));
+
+```
+
+Command line usage
+```
+npm install superShots -g --save
+
+```
+```
+$ superShots https://example.com
+```
+
+
+
 ## Contributing
 
 Contributions are always welcome!
