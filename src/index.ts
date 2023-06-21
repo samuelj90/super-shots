@@ -1,8 +1,8 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { URL } from 'url';
 
 class SuperShots {
-  private browser: puppeteer.Browser | null;
+  private browser: Browser | null;
   private visitedUrls: Set<string>;
 
   constructor() {
@@ -33,7 +33,7 @@ class SuperShots {
     await page.close();
   }
 
-  private async crawl(url: string, page: puppeteer.Page, domain: string): Promise<void> {
+  private async crawl(url: string, page: Page, domain: string): Promise<void> {
     if (this.visitedUrls.has(url)) return;
 
     this.visitedUrls.add(url);
