@@ -21,13 +21,13 @@ This command will build the project
 
 ## Usage
 ```
-npm install superShots --save
+npm install super-shots --save
 ```
 
 create a file and coppy below contents
 
 ```
-import SuperShots from 'superShots';
+import SuperShots from 'super-shots';
 
 async function runCrawler(): Promise<void> {
   const superShots = new SuperShots();
@@ -46,10 +46,10 @@ runCrawler()
 
 Command line usage
 ```
-npm install superShots -g --save
+npm install super-shots -g --save
 ```
 ```
-$ superShots https://example.com
+$ super-shots https://example.com
 ```
 
 
