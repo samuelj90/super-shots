@@ -1,6 +1,6 @@
-import puppeteer, { Browser, Page } from 'puppeteer';
-import { URL } from 'url';
-
+import puppeteer, { Browser, Page } from "puppeteer";
+import { URL } from "url";
+import * as fs from "fs";
 class SuperShots {
   private browser: Browser | null;
   private visitedUrls: Set<string>;
@@ -11,7 +11,14 @@ class SuperShots {
   }
 
   public async initialize(): Promise<void> {
-    this.browser = await puppeteer.launch({ headless : "new"});
+    this.browser = await puppeteer.launch({
+      headless: "new",
+      args: [`--window-size=1920,1080`],
+      defaultViewport: {
+        width: 1920,
+        height: 1080,
+      },
+    });
   }
 
   public async close(): Promise<void> {
@@ -22,36 +29,56 @@ class SuperShots {
 
   public async crawlAndScreenshot(url: string): Promise<void> {
     if (!this.browser) {
-      throw new Error('Browser instance is not initialized. Call initialize() first.');
+      throw new Error(
+        "Browser instance is not initialized. Call initialize() first."
+      );
     }
 
     const page = await this.browser.newPage();
     const domain = new URL(url).hostname;
 
-    await this.crawl(url, page, domain);
+    const screenShotDirectory = "./screenshots";
+
+    if (!fs.existsSync(screenShotDirectory)) {
+      fs.mkdirSync(screenShotDirectory);
+      console.log(
+        `creating a directory at ${screenShotDirectory} for storing screenshots`
+      );
+    }
+    await this.crawl(url, page, domain, screenShotDirectory);
 
     await page.close();
   }
 
-  private async crawl(url: string, page: Page, domain: string): Promise<void> {
+  private async crawl(
+    url: string,
+    page: Page,
+    domain: string,
+    screenShotDirectory: string
+  ): Promise<void> {
     if (this.visitedUrls.has(url)) return;
 
     this.visitedUrls.add(url);
-    console.log('Crawling:', url);
+    console.log("Crawling:", url);
 
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await page.screenshot({ path: `screenshot-${Date.now()}.png` });
+    await page.goto(url, { waitUntil: "networkidle2" });
+    await page.screenshot({
+      path: `${screenShotDirectory}/screenshot-${Date.now()}.png`,
+      fullPage: true,
+    });
 
-    const links = await page.$$eval('a', (anchors) => anchors.map((a) => a.href));
+    const links = await page.$$eval("a", (anchors) =>
+      anchors.map((a) => a.href)
+    );
 
     for (const link of links) {
       try {
         const linkUrl = new URL(link);
         if (linkUrl.hostname === domain) {
-          await this.crawl(link, page, domain);
+          await this.crawl(link, page, domain, screenShotDirectory);
         }
       } catch (error) {
-        console.error('Invalid URL:', link);
+        console.error("Invalid URL:", link);
       }
     }
   }
@@ -64,7 +91,7 @@ if (require.main === module) {
   const args = process.argv.slice(2);
 
   if (args.length === 0) {
-    console.error('Please provide a URL to crawl.');
+    console.error("Please provide a URL to crawl.");
     process.exit(1);
   }
 
@@ -76,9 +103,9 @@ if (require.main === module) {
       await superShots.initialize();
       await superShots.crawlAndScreenshot(url);
       await superShots.close();
-      console.log('Crawl and screenshot complete.');
+      console.log("Crawl and screenshot complete.");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   })();
 }
