@@ -1,5 +1,9 @@
 # Super Shots
 
+
+[![Node.js Package](https://github.com/samuelj90/super-shots/actions/workflows/npm-publish-github-packages.yml/badge.svg)](https://github.com/samuelj90/super-shots/actions/workflows/npm-publish-github-packages.yml)
+
+
 A Nodejs utility program that accept a URL crawls all the links under the same domain and takes screenshots when load finishes.
 
 ## Run and Build
