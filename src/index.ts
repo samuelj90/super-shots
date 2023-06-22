@@ -11,7 +11,7 @@ class SuperShots {
   }
 
   public async initialize(): Promise<void> {
-    this.browser = await puppeteer.launch();
+    this.browser = await puppeteer.launch({ headless : "new"});
   }
 
   public async close(): Promise<void> {
